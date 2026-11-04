@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Deploy — Kisan Haat Docs</title>
+<style>
+:root{--bg:#0f1410;--ink:#e8efe6;--muted:#9aab9a;--accent:#3d8b5a;--card:#1a221c}
+*{box-sizing:border-box}body{margin:0;font:16px/1.55 Figtree,system-ui,Segoe UI,sans-serif;background:var(--bg);color:var(--ink)}
+a{color:#7dce9a}header{padding:1.25rem 1.5rem;border-bottom:1px solid #2a352c;display:flex;gap:1rem;flex-wrap:wrap;align-items:center}
+header strong{color:#fff;font-size:1.1rem}header nav a{margin-right:1rem;text-decoration:none;color:var(--muted)}
+header nav a:hover{color:#fff}main{max-width:52rem;margin:0 auto;padding:2rem 1.25rem 4rem}
+h1,h2,h3{line-height:1.25;font-family:Fraunces,Georgia,serif}pre{background:var(--card);padding:1rem;overflow:auto;border-radius:8px}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em}
+table{border-collapse:collapse;width:100%;margin:1rem 0}th,td{border:1px solid #2a352c;padding:.5rem .65rem;text-align:left}
+th{background:var(--card)}footer{max-width:52rem;margin:0 auto;padding:0 1.25rem 3rem;color:var(--muted);font-size:.9rem}
+blockquote{border-left:3px solid var(--accent);margin:1rem 0;padding:.25rem 0 .25rem 1rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<header>
+  <strong>Kisan Haat Docs</strong>
+  <nav><a href="index.html">Home</a> <a href="DEPLOY.html">Deploy</a> <a href="server.html">API</a> <a href="mobile.html">Mobile</a> <a href="admin.html">Admin</a> <a href="web.html">Web</a> <a href="STORE_CHECKLIST.html">Store</a></nav>
+</header>
+<main>
+<h1 id="deploy-kisan-haat">Deploy Kisan Haat</h1>
+<p>Production path: <strong>Docker Compose on a VPS</strong> (API + Postgres + web), fronted by Zyvor <strong>website-server</strong> (TLS + host routing). Optional: admin desk, k3s, EAS store builds.</p>
+<p><strong>Live today:</strong> <a href="https://kishanhatt.zyvor.dev">https://kishanhatt.zyvor.dev</a> · API <a href="https://kishanhatt.zyvor.dev/api/ready">https://kishanhatt.zyvor.dev/api/ready</a></p>
+<p>Public docs: <a href="https://zyvorai.github.io/kisan-haat-docs/">zyvorai.github.io/kisan-haat-docs</a></p>
+<h2 id="one-command-clone">One command (clone)</h2>
+<pre><code class="language-bash">./install.sh
+</code></pre>
+<p>The installer checks Docker, writes <code>.env</code> (with a generated <code>OTP_PEPPER</code> if missing), runs <code>docker compose up -d --build</code>, and waits for <code>/ready</code>.</p>
+<h2 id="1-vps-docker-compose">1. VPS (Docker Compose)</h2>
+<h3 id="prerequisites">Prerequisites</h3>
+<ul>
+<li>Docker Engine 24+ with Compose plugin</li>
+<li>DNS: <code>kishanhatt.zyvor.dev</code> (or your brand domain) → VPS</li>
+<li>Open ports <code>80</code>/<code>443</code> on the edge; compose publishes API <code>:4310</code> and web <code>:30888</code> on loopback/LAN as needed</li>
+</ul>
+<h3 id="bring-up-manual">Bring up (manual)</h3>
+<pre><code class="language-bash">cp .env.deploy.example .env
+# Edit OTP_PEPPER, POSTGRES_PASSWORD, MSG91_*, ADMIN_PHONES, CORS_ORIGINS, Cashfree keys
+
+docker compose up -d --build
+curl -fsS http://127.0.0.1:4310/ready
+curl -fsS http://127.0.0.1:30888/healthz
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Local</th>
+<th>Public</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Web</td>
+<td>http://HOST:30888</td>
+<td>https://kishanhatt.zyvor.dev</td>
+</tr>
+<tr>
+<td>API</td>
+<td>http://HOST:4310</td>
+<td>https://kishanhatt.zyvor.dev/api</td>
+</tr>
+<tr>
+<td>Admin (optional)</td>
+<td><code>docker compose --profile admin up -d --build</code> → :8081</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>Browsers call <strong><code>/api/*</code></strong> on the same origin; nginx (web) and/or website-server proxy to the API container.</p>
+<h3 id="edge-bot-block">Edge / bot block</h3>
+<p>Zyvor <code>website-server</code> blocks scraper UAs (<code>curl</code>, <code>okhttp</code>, …) on main marketing hosts. <strong>Kisan Haat hosts</strong> (<code>kishanhatt.zyvor.dev</code>, <code>kisanhaat.zyvor.dev</code>) are exempt so Expo Android (OkHttp) and iOS (CFNetwork) can call the API. After changing <code>botblock.go</code>, rebuild and restart the website container.</p>
+<h3 id="production-sms">Production SMS</h3>
+<ol>
+<li>Set <code>SMS_PROVIDER=msg91</code></li>
+<li>Set <code>MSG91_AUTH_KEY</code> and DLT <code>MSG91_TEMPLATE_ID</code> (sender / PE as registered)</li>
+<li>Set <code>ALLOW_CONSOLE_SMS=false</code></li>
+<li>Keep Fast2SMS keys as optional fallback (<code>fast2sms</code> needs a ≥₹100 lifetime wallet top-up before the API route works)</li>
+</ol>
+<p>Staging-only: <code>SMS_PROVIDER=console</code> + <code>ALLOW_CONSOLE_SMS=true</code> (OTP in API logs / <code>devCode</code>).</p>
+<h3 id="staff-phones">Staff phones</h3>
+<p><code>ADMIN_PHONES=+91…,+91…</code> — OTP accounts on this list may call <code>/admin/*</code> (reports, audit, invoices, cluster attach, suspend, remove listing).</p>
+<h3 id="vision-crop-scan">Vision (crop scan)</h3>
+<p>Enabled by default (<code>VISION_ENABLED=true</code>). Needs ~1.5 GiB RAM (<code>API_MEM_LIMIT</code>). First request downloads MobileNet into the <code>kisan-transformers-cache</code> volume. Disable on tiny hosts:</p>
+<pre><code class="language-env">VISION_ENABLED=false
+API_MEM_LIMIT=512m
+</code></pre>
+<h3 id="tls">TLS</h3>
+<p>Production uses website-server TLS on the host. Set <code>CORS_ORIGINS</code> to your HTTPS origins (include <code>https://kishanhatt.zyvor.dev</code>).</p>
+<hr />
+<h2 id="2-mobile-eas">2. Mobile (EAS)</h2>
+<pre><code class="language-bash">cd mobile
+npm install
+npx eas login
+npx eas init   # paste projectId into app.json → extra.eas.projectId
+</code></pre>
+<p>Or set GitHub Actions secret <code>EXPO_TOKEN</code> and run workflow <strong>EAS Build</strong>.</p>
+<p>Profiles in <code>eas.json</code> already point preview/production at:</p>
+<ul>
+<li><code>EXPO_PUBLIC_API_BASE_URL=https://kishanhatt.zyvor.dev/api</code></li>
+<li>Privacy / how-to on the same host</li>
+</ul>
+<pre><code class="language-bash">npx eas build --platform android --profile preview
+npx eas build --platform all --profile production
+</code></pre>
+<p>Submit credentials go in <code>eas.json → submit.production</code> (App Store Connect id + Play service account). Checklist: <code>mobile/STORE_CHECKLIST.md</code>.</p>
+<hr />
+<h2 id="3-k3s">3. k3s</h2>
+<p>See <code>deploy/k3s/README.md</code>. Apply secrets from <code>secret.example.yaml</code>, then kustomization. API probes use <code>/ready</code> and <code>/health</code>; memory limit is 1536 Mi for vision.</p>
+<p>Images:</p>
+<ul>
+<li><code>ghcr.io/zyvorai/kisan-haat-api:latest</code></li>
+<li><code>ghcr.io/zyvorai/kisan-haat-web:latest</code></li>
+<li><code>ghcr.io/zyvorai/kisan-haat-admin:latest</code></li>
+</ul>
+<hr />
+<h2 id="4-health-checks">4. Health checks</h2>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /health</code></td>
+<td>Process up</td>
+</tr>
+<tr>
+<td><code>GET /ready</code></td>
+<td>Postgres reachable</td>
+</tr>
+<tr>
+<td><code>GET /healthz</code> (web)</td>
+<td>nginx up</td>
+</tr>
+<tr>
+<td><code>GET https://kishanhatt.zyvor.dev/api/ready</code></td>
+<td>Public edge + API + DB</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="5-checklist-before-go-live">5. Checklist before go-live</h2>
+<ul>
+<li>[x] Strong <code>OTP_PEPPER</code> and DB password (rotate off defaults)</li>
+<li>[x] <code>SEED_ON_START=false</code></li>
+<li>[x] Real SMS provider (<code>msg91</code>) + <code>ALLOW_CONSOLE_SMS=false</code></li>
+<li>[x] <code>ADMIN_PHONES</code> set for operator desk</li>
+<li>[x] <code>CORS_ORIGINS</code> includes live HTTPS origin</li>
+<li>[x] Mobile <code>eas.json</code> API URL → <code>kishanhatt.zyvor.dev/api</code></li>
+<li>[ ] EAS <code>projectId</code> set (<code>eas login</code> / <code>EXPO_TOKEN</code>)</li>
+<li>[ ] MSG91 wallet / DLT PE monitored for delivery</li>
+<li>[ ] Store listing + privacy URL on Play / ASC</li>
+<li>[ ] Backups for Postgres volume</li>
+</ul>
+</main>
+<footer>
+  Live: <a href="https://kishanhatt.zyvor.dev">kishanhatt.zyvor.dev</a> ·
+  Source: <a href="https://github.com/zyvorai/kisan-haat">zyvorai/kisan-haat</a> (private) ·
+  Pages: <a href="https://github.com/zyvorai/kisan-haat-docs">kisan-haat-docs</a>
+</footer>
+</body>
+</html>
