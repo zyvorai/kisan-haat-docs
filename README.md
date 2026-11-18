@@ -6,6 +6,8 @@ Farmer surplus marketplace. When harvest outruns the mandi, **kisans list leftov
 - **Docs (GitHub Pages):** [zyvorai.github.io/kisan-haat-docs](https://zyvorai.github.io/kisan-haat-docs/)
 - **Private code:** [zyvorai/kisan-haat](https://github.com/zyvorai/kisan-haat)
 
+[Client overview (PDF)](docs/Kisan-Haat-Client-Overview.pdf)
+
 ## Stack
 
 | Piece | Path | Notes |
