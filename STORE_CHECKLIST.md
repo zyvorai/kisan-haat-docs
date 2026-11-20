@@ -43,12 +43,12 @@ Terms / how-to: https://kishanhatt.zyvor.dev/howto.html
 
 ## Billing note for review
 
-Platform membership (₹25/day or ₹399/month, about US$0.25 or US$4 excl. tax outside India) is paid via Cashfree in the system browser. Harvest trade is cash-on-delivery at the farm gate — not digital goods / IAP.
+Free for villagers: no plan fees, no commission (plans are switched off, not offered). Harvest trade is cash-on-delivery at the farm gate — not digital goods / IAP.
 
 ## Smoke after install
 
 1. Language → village → OTP login
 2. Browse listings; open detail; reserve (buyer)
-3. Sell gated until plan active → Plans → Cashfree → return → plan active
+3. Selling is never gated (the app is free; plans are switched off and not offered)
 4. Accept / handover / cash recorded on a deal
 5. Report from listing or deal
