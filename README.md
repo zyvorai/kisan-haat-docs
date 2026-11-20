@@ -23,14 +23,7 @@ Farmer surplus marketplace. When harvest outruns the mandi, **kisans list leftov
 
 **Harvest sales (kisan ↔ buyer):** COD only at the gate. Peer Call / WhatsApp / SMS from listing & deal screens.
 
-**Platform billing (kisan → Kisan Haat):**
-
-| Plan | Price | API id |
-|---|---|---|
-| Daily haat | ₹25 / day (about US$0.25 excl. tax outside India) | `plan_daily` |
-| Monthly haat | ₹399 / month (about US$4 excl. tax outside India) | `plan_monthly` |
-
-Prices: INR incl. 18% GST in India; US dollars excl. tax elsewhere (VAT, GST or sales tax added where applicable). Pay online by UPI, card or netbanking; international cards work (charged in rupees); or request a US-dollar invoice by bank transfer. Custom pricing: sales@zyvor.dev. [Buy](https://zyvor.dev/buy). Inside the app, pay via **Cashfree** (Orders API) in the system browser, or cash/UPI to collector (`PLATFORM_UPI_ID`). Listing ads requires an active paid period (`402 SUBSCRIPTION_REQUIRED` otherwise).
+**Free for villagers: no plan fees, no commission.** The old daily and monthly plans (`plan_daily`, `plan_monthly`, paid via Cashfree) are switched off and not offered; nothing is charged. The owner's decision is that the app is free.
 
 Web: `register.html` · `billing.html` · `checkout.html` · `pay.html` · API `/billing/*`
 
