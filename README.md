@@ -4,7 +4,7 @@ Farmer surplus marketplace. When harvest outruns the mandi, **kisans list leftov
 
 - **Live:** [kishanhatt.zyvor.dev](https://kishanhatt.zyvor.dev) · API [`/api`](https://kishanhatt.zyvor.dev/api/ready)
 - **Docs (GitHub Pages):** [zyvorai.github.io/kisan-haat-docs](https://zyvorai.github.io/kisan-haat-docs/)
-- **Private code:** [zyvorai/kisan-haat](https://github.com/zyvorai/kisan-haat)
+- **Private code:** zyvorai/kisan-haat (private; to request access write to sales@zyvor.dev)
 
 [Client overview (PDF)](docs/Kisan-Haat-Client-Overview.pdf)
 
@@ -29,11 +29,7 @@ Web: `register.html` · `billing.html` · `checkout.html` · `pay.html` · API `
 
 ## Clone
 
-```bash
-gh repo clone zyvorai/kisan-haat
-# or
-git clone git@github.com:zyvorai/kisan-haat.git
-```
+The source repository is private. To request access, write to sales@zyvor.dev. The steps below assume you have it.
 
 ## Local run
 

@@ -8,7 +8,7 @@ Farmer surplus marketplace — list leftover harvest, reserve nearby, settle **C
 | **API ready** | [kishanhatt.zyvor.dev/api/ready](https://kishanhatt.zyvor.dev/api/ready) |
 | **Privacy** | [privacy.html](https://kishanhatt.zyvor.dev/privacy.html) |
 | **How to** | [howto.html](https://kishanhatt.zyvor.dev/howto.html) |
-| **Private source** | [zyvorai/kisan-haat](https://github.com/zyvorai/kisan-haat) |
+| **Private source** | zyvorai/kisan-haat (private; to request access write to sales@zyvor.dev) |
 
 ## Guides
 
