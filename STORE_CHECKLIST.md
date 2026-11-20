@@ -43,7 +43,7 @@ Terms / how-to: https://kishanhatt.zyvor.dev/howto.html
 
 ## Billing note for review
 
-Platform membership (₹25/day or ₹399/month) is paid via Cashfree in the system browser. Harvest trade is cash-on-delivery at the farm gate — not digital goods / IAP.
+Platform membership (₹25/day or ₹399/month, about US$0.25 or US$4 excl. tax outside India) is paid via Cashfree in the system browser. Harvest trade is cash-on-delivery at the farm gate — not digital goods / IAP.
 
 ## Smoke after install
 

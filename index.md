@@ -24,5 +24,5 @@ Farmer surplus marketplace — list leftover harvest, reserve nearby, settle **C
 - Edge host exempt for Expo OkHttp / CFNetwork (no mobile 403)
 - OTP via MSG91; `ALLOW_CONSOLE_SMS=false`
 - Staff via `ADMIN_PHONES`
-- Cashfree for daily ₹25 / monthly ₹399 platform plans
+- Cashfree for daily ₹25 (about US$0.25) / monthly ₹399 (about US$4) platform plans; INR incl. 18% GST in India, US dollars excl. tax elsewhere
 - EAS `projectId` still needs `eas login` or `EXPO_TOKEN`

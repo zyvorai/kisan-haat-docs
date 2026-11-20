@@ -27,10 +27,10 @@ Farmer surplus marketplace. When harvest outruns the mandi, **kisans list leftov
 
 | Plan | Price | API id |
 |---|---|---|
-| Daily haat | ₹25 / day | `plan_daily` |
-| Monthly haat | ₹399 / month | `plan_monthly` |
+| Daily haat | ₹25 / day (about US$0.25 excl. tax outside India) | `plan_daily` |
+| Monthly haat | ₹399 / month (about US$4 excl. tax outside India) | `plan_monthly` |
 
-Pay via **Cashfree** (Orders API) in the system browser, or cash/UPI to collector (`PLATFORM_UPI_ID`). Listing ads requires an active paid period (`402 SUBSCRIPTION_REQUIRED` otherwise).
+Prices: INR incl. 18% GST in India; US dollars excl. tax elsewhere (VAT, GST or sales tax added where applicable). Pay online by UPI, card or netbanking; international cards work (charged in rupees); or request a US-dollar invoice by bank transfer. Custom pricing: sales@zyvor.dev. [Buy](https://zyvor.dev/buy). Inside the app, pay via **Cashfree** (Orders API) in the system browser, or cash/UPI to collector (`PLATFORM_UPI_ID`). Listing ads requires an active paid period (`402 SUBSCRIPTION_REQUIRED` otherwise).
 
 Web: `register.html` · `billing.html` · `checkout.html` · `pay.html` · API `/billing/*`
 
